@@ -235,21 +235,6 @@
             box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
         }
 
-        .btn-details::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-details:hover::before {
-            left: 100%;
-        }
-
         .btn-primary {
             background: linear-gradient(135deg, #00ff88, #00cc66);
             color: #000000;
@@ -293,31 +278,23 @@
             overflow-x: auto;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-copy {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            flex: 1;
-        }
-
         .btn-link {
             background: linear-gradient(135deg, #00ff88, #00cc66);
             color: #000000;
-            padding: 8px 16px;
+            padding: 12px 20px;
             border-radius: 6px;
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             text-align: center;
-            flex: 1;
+            display: block;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-link:hover {
+            background: linear-gradient(135deg, #00cc66, #00aa55);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
         }
 
         .cost-info {
@@ -360,10 +337,6 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 5px;
                 font-size: 0.75rem;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
             }
         }
     </style>
@@ -632,7 +605,6 @@
                         <span class="badge badge-experience">${template.experience}</span>
                     </div>
 
-                    ${template.models ? `
                     <div style="margin-bottom: 12px;">
                         <div style="font-size: 0.8rem; color: #00ff88; font-weight: 600; margin-bottom: 6px;">Available Models:</div>
                         <div style="display: flex; flex-wrap: wrap; gap: 4px;">
@@ -643,7 +615,6 @@
                             `).join('')}
                         </div>
                     </div>
-                    ` : ''}
                     
                     <div class="template-description">
                         ${template.description}
@@ -735,10 +706,7 @@
                             <div>Storage: ${template.tiers['ultra-fast'].storage}</div>
                         </div>
                         
-                        <div class="action-buttons">
-                            <button class="btn-copy" onclick="copyConfig(${template.id})">Copy Settings</button>
-                            <a href="https://dashboard.nosana.com/deploy" target="_blank" class="btn-link">Deploy on Nosana</a>
-                        </div>
+                        <a href="https://dashboard.nosana.com/deploy" target="_blank" class="btn-link">Deploy on Nosana</a>
 
                         <div class="cost-info">
                             <strong>Estimated Cost:</strong> ${template.tiers['ultra-fast'].cost} NOS/hour<br>
@@ -776,34 +744,15 @@
             deploySection.classList.toggle('hidden');
         }
 
-        function copyConfig(templateId) {
-            const template = templates.find(t => t.id === templateId);
-            const ultraFast = template.tiers['ultra-fast'];
-            const config = `Recommended Nosana Configuration:
-
-Market: ${ultraFast.market}
-Docker Image: ${template.image}
-vCPUs: ${ultraFast.vcpu.split('-')[0]}+
-Memory: ${ultraFast.memory.split('-')[0]}+
-Storage: ${ultraFast.storage}
-
-Estimated Cost: ${ultraFast.cost} NOS/hour`;
-            
-            navigator.clipboard.writeText(config).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
-                
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 2000);
-            }).catch(() => {
-                alert('Configuration copied to clipboard!');
-            });
+        // Initialize when page loads
+        window.addEventListener('DOMContentLoaded', renderTemplates);
+        
+        // Fallback in case DOMContentLoaded already fired
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderTemplates);
+        } else {
+            renderTemplates();
         }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', renderTemplates);
     </script>
 </body>
 </html>
