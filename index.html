@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosana GPU Templates Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00ff88, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #cccccc;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .template-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .template-card:hover {
+            transform: translateY(-4px);
+            border-color: #00ff88;
+            box-shadow: 0 15px 35px rgba(0, 255, 136, 0.15);
+        }
+
+        .template-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .template-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: linear-gradient(135deg, #00ff88, #ffffff);
+            color: #000000;
+        }
+
+        .template-info h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .template-badges {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-category {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .badge-experience {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .template-description {
+            color: #cccccc;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .use-cases {
+            margin-bottom: 20px;
+        }
+
+        .use-cases h4 {
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .use-cases ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .use-cases li {
+            color: #cccccc;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .use-cases li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .specs-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .specs-header {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(255, 255, 255, 0.1));
+            padding: 10px 16px;
+            border-radius: 12px 12px 0 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #ffffff;
+        }
+
+        .specs-row {
+            padding: 10px 16px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+        }
+
+        .specs-row:first-child {
+            border-top: none;
+        }
+
+        .tier-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .tier-ultra-fast {
+            background: #ff4444;
+            color: #ffffff;
+        }
+
+        .tier-fast {
+            background: #ff8800;
+            color: #ffffff;
+        }
+
+        .tier-standard {
+            background: #00ff88;
+            color: #000000;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+
+        .btn-details {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 255, 136, 0.2));
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-details:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 255, 136, 0.3));
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-details::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-details:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            color: #000000;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00cc66, #00aa55);
+            transform: translateY(-1px);
+        }
+
+        .details-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .deployment-section {
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .deploy-title {
+            color: #00ff88;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .command-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.8rem;
+            color: #00ff88;
+            margin-bottom: 12px;
+            overflow-x: auto;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-copy {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .btn-link {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            color: #000000;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-align: center;
+            flex: 1;
+        }
+
+        .cost-info {
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #00ff88;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .docker-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        .docker-info strong {
+            color: #00ff88;
+        }
+
+        .docker-info code {
+            color: #ffffff;
+            font-size: 0.8rem;
+            word-break: break-all;
+        }
+
+        @media (max-width: 768px) {
+            .templates-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .specs-header,
+            .specs-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
+                font-size: 0.75rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Nosana GPU Templates</h1>
+            <p>Ready-to-deploy AI templates on Nosana's decentralized GPU network</p>
+        </div>
+
+        <div class="templates-grid" id="templates-grid">
+            <!-- Templates will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        const templates = [
+            {
+                id: 1,
+                name: "ComfyUI Image Generation",
+                image: "docker.io/nosana/comfyui:2.0.5",
+                category: "Image Generation",
+                experience: "Intermediate",
+                icon: "🎭",
+                description: "Node-based workflow interface for advanced Stable Diffusion image generation with multiple model support including SD 1.5, SDXL, and Flux Schnell FP8.",
+                useCases: [
+                    "Advanced artistic workflows with multiple processing stages",
+                    "Professional film and game asset creation pipelines",
+                    "Custom image processing automation for studios",
+                    "Complex AI art installations and interactive experiences"
+                ],
+                models: ["Stable Diffusion 1.5", "Stable Diffusion XL", "Flux Schnell FP8"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "12-16", memory: "32-48GB", storage: "400GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3090", vcpu: "8-12", memory: "24-32GB", storage: "250GB", market: "nvidia-3090", cost: "0.025" },
+                    "standard": { gpu: "RTX 3080", vcpu: "6-10", memory: "16-24GB", storage: "150GB", market: "nvidia-3080", cost: "0.018" }
+                }
+            },
+            {
+                id: 2,
+                name: "DeepSeek Janus Pro Models",
+                image: "docker.io/nosana/janus-pro:0.0.0",
+                category: "Image Generation",
+                experience: "Intermediate",
+                icon: "🖼️",
+                description: "Multimodal AI model capable of both understanding and generating images and text with 1B and 7B parameter variants.",
+                useCases: [
+                    "Automated image captioning and description",
+                    "Visual question answering systems",
+                    "Content moderation for images and text",
+                    "E-commerce product description generation"
+                ],
+                models: ["1B Model", "7B Model"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "10-14", memory: "24-32GB", storage: "200GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3080", vcpu: "6-8", memory: "16-24GB", storage: "150GB", market: "nvidia-3080", cost: "0.018" },
+                    "standard": { gpu: "RTX 3070", vcpu: "4-6", memory: "12-16GB", storage: "100GB", market: "nvidia-3070", cost: "0.012" }
+                }
+            },
+            {
+                id: 3,
+                name: "DeepSeek R1 Llama Models",
+                image: "docker.io/vllm/vllm-openai:v0.9.2",
+                category: "Language Models",
+                experience: "Intermediate",
+                icon: "🧠",
+                description: "Latest DeepSeek R1 reasoning models based on Llama architecture with 8B and 70B AWQ parameter variants for advanced reasoning tasks.",
+                useCases: [
+                    "Complex mathematical problem solving and calculations",
+                    "Academic research assistance and paper analysis",
+                    "Code debugging and algorithmic thinking",
+                    "Legal document analysis and logical reasoning"
+                ],
+                models: ["8B Model", "70B AWQ Model"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "16-24", memory: "48-64GB", storage: "300GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3090", vcpu: "12-16", memory: "32-48GB", storage: "200GB", market: "nvidia-3090", cost: "0.025" },
+                    "standard": { gpu: "RTX 3080", vcpu: "8-12", memory: "24-32GB", storage: "150GB", market: "nvidia-3080", cost: "0.018" }
+                }
+            },
+            {
+                id: 4,
+                name: "DeepSeek R1 Qwen Models",
+                image: "docker.io/vllm/vllm-openai:v0.9.2",
+                category: "Language Models",
+                experience: "Beginner",
+                icon: "⚡",
+                description: "Efficient Qwen-based reasoning models with multiple size variants from 1.5B to 32B parameters, optimized for fast inference and reasoning tasks.",
+                useCases: [
+                    "High-volume chatbot services with reasoning capabilities",
+                    "Real-time customer support with problem-solving abilities",
+                    "Educational quiz and homework assistance platforms",
+                    "Fast content moderation with contextual understanding"
+                ],
+                models: ["1.5B Model", "7B Model", "14B Model", "32B Model"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "12-16", memory: "40-64GB", storage: "250GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3090", vcpu: "8-12", memory: "24-40GB", storage: "180GB", market: "nvidia-3090", cost: "0.025" },
+                    "standard": { gpu: "RTX 3080", vcpu: "6-8", memory: "16-24GB", storage: "120GB", market: "nvidia-3080", cost: "0.018" }
+                }
+            },
+            {
+                id: 5,
+                name: "GPT-OSS Models",
+                image: "docker.io/ollama/ollama:0.11.3",
+                category: "Language Models",
+                experience: "Advanced",
+                icon: "🏢",
+                description: "Large-scale open-source GPT-style language models with 20B and 120B parameters for enterprise-grade natural language processing tasks.",
+                useCases: [
+                    "Enterprise-grade content creation and copywriting",
+                    "Advanced code generation and software development assistance",
+                    "Complex document analysis and summarization",
+                    "Sophisticated conversational AI for customer service"
+                ],
+                models: ["20B Model", "120B Model"],
+                tiers: {
+                    "ultra-fast": { gpu: "8xA5000", vcpu: "32-64", memory: "128-256GB", storage: "1TB", market: "nvidia-8x-a5000", cost: "0.150" },
+                    "fast": { gpu: "RTX 4090", vcpu: "16-24", memory: "64-96GB", storage: "500GB", market: "nvidia-4090", cost: "0.035" },
+                    "standard": { gpu: "RTX 3090", vcpu: "12-16", memory: "32-48GB", storage: "250GB", market: "nvidia-3090", cost: "0.025" }
+                }
+            },
+            {
+                id: 6,
+                name: "Gemma 3 Models",
+                image: "docker.io/ollama/ollama:0.9.6",
+                category: "Language Models",
+                experience: "Intermediate",
+                icon: "💎",
+                description: "Google's Gemma 3 instruction-tuned models with quantization optimization in 4B, 12B, and 27B parameter variants.",
+                useCases: [
+                    "Instruction following and task completion",
+                    "Creative writing and content generation",
+                    "Question answering and information retrieval",
+                    "Educational content creation and tutoring"
+                ],
+                models: ["4B IT QAT", "12B IT QAT", "27B IT QAT"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "14-20", memory: "40-64GB", storage: "300GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3090", vcpu: "10-14", memory: "28-40GB", storage: "200GB", market: "nvidia-3090", cost: "0.025" },
+                    "standard": { gpu: "RTX 3080", vcpu: "8-12", memory: "20-28GB", storage: "150GB", market: "nvidia-3080", cost: "0.018" }
+                }
+            },
+            {
+                id: 7,
+                name: "Whisper ASR Webservice",
+                image: "docker.io/nosana/whisper-asr:2.0.0",
+                category: "Audio Processing",
+                experience: "Beginner",
+                icon: "🎤",
+                description: "OpenAI's Whisper automatic speech recognition system as a web service with support for 99+ languages and real-time transcription.",
+                useCases: [
+                    "Meeting transcription and note-taking automation",
+                    "Podcast and video content subtitling",
+                    "Customer service call analysis and quality assurance",
+                    "Legal deposition and court proceeding transcription"
+                ],
+                models: ["Whisper Large v3"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "8-12", memory: "16-24GB", storage: "100GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3080", vcpu: "6-8", memory: "12-16GB", storage: "75GB", market: "nvidia-3080", cost: "0.018" },
+                    "standard": { gpu: "RTX 3070", vcpu: "4-6", memory: "8-12GB", storage: "50GB", market: "nvidia-3070", cost: "0.012" }
+                }
+            },
+            {
+                id: 8,
+                name: "PyTorch Jupyter Notebook",
+                image: "docker.io/nosana/pytorch-jupyter:2.0.0",
+                category: "Development Tools",
+                experience: "Intermediate",
+                icon: "🔬",
+                description: "Complete PyTorch development environment with Jupyter notebooks, pre-installed libraries, and GPU acceleration for machine learning research.",
+                useCases: [
+                    "Deep learning model development and prototyping",
+                    "Neural network research and experimentation",
+                    "Computer vision and NLP model training",
+                    "Educational ML coursework and tutorials"
+                ],
+                models: ["PyTorch 2.0", "CUDA Support"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "16-24", memory: "32-64GB", storage: "500GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3090", vcpu: "12-16", memory: "24-48GB", storage: "300GB", market: "nvidia-3090", cost: "0.025" },
+                    "standard": { gpu: "RTX 3080", vcpu: "8-12", memory: "16-32GB", storage: "200GB", market: "nvidia-3080", cost: "0.018" }
+                }
+            },
+            {
+                id: 9,
+                name: "TensorFlow Jupyter Notebook",
+                image: "docker.io/nosana/tensorflow-jupyter:2.0.0",
+                category: "Development Tools",
+                experience: "Intermediate",
+                icon: "🧮",
+                description: "TensorFlow development environment with Jupyter notebooks, Keras integration, and optimized GPU support for scalable machine learning projects.",
+                useCases: [
+                    "Large-scale machine learning model development",
+                    "Production ML pipeline prototyping",
+                    "Computer vision and image recognition projects",
+                    "Time series analysis and forecasting models"
+                ],
+                models: ["TensorFlow 2.0", "Keras", "GPU Optimization"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "16-24", memory: "32-64GB", storage: "500GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3090", vcpu: "12-16", memory: "24-48GB", storage: "300GB", market: "nvidia-3090", cost: "0.025" },
+                    "standard": { gpu: "RTX 3080", vcpu: "8-12", memory: "16-32GB", storage: "200GB", market: "nvidia-3080", cost: "0.018" }
+                }
+            },
+            {
+                id: 10,
+                name: "VSCode Server",
+                image: "docker.io/nosana/vscode-server:2.0.0",
+                category: "Development Tools",
+                experience: "Beginner",
+                icon: "💻",
+                description: "Cloud-based Visual Studio Code environment with GPU access, extensions support, and collaborative development features for remote coding.",
+                useCases: [
+                    "Remote development and collaborative coding",
+                    "GPU-accelerated code development and testing",
+                    "Machine learning project development",
+                    "Cloud-based development environment setup"
+                ],
+                models: ["VS Code", "Extensions", "GPU Support"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "12-16", memory: "24-48GB", storage: "400GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3090", vcpu: "8-12", memory: "16-32GB", storage: "250GB", market: "nvidia-3090", cost: "0.025" },
+                    "standard": { gpu: "RTX 3080", vcpu: "6-10", memory: "12-24GB", storage: "150GB", market: "nvidia-3080", cost: "0.018" }
+                }
+            },
+            {
+                id: 11,
+                name: "RStudio Server",
+                image: "docker.io/nosana/rstudio:2.0.0",
+                category: "Development Tools",
+                experience: "Intermediate",
+                icon: "📊",
+                description: "Web-based RStudio environment with GPU support for statistical computing, data science, and advanced analytics with R programming language.",
+                useCases: [
+                    "Statistical analysis and data science projects",
+                    "Bioinformatics and computational biology research",
+                    "Financial modeling and quantitative analysis",
+                    "Academic research and statistical consulting"
+                ],
+                models: ["R 4.x", "Tidyverse", "GPU Packages"],
+                tiers: {
+                    "ultra-fast": { gpu: "RTX 4090", vcpu: "14-20", memory: "32-64GB", storage: "400GB", market: "nvidia-4090", cost: "0.035" },
+                    "fast": { gpu: "RTX 3090", vcpu: "10-14", memory: "24-48GB", storage: "250GB", market: "nvidia-3090", cost: "0.025" },
+                    "standard": { gpu: "RTX 3080", vcpu: "8-12", memory: "16-32GB", storage: "150GB", market: "nvidia-3080", cost: "0.018" }
+                }
+            }
+        ];
+
+        function renderTemplates() {
+            const container = document.getElementById('templates-grid');
+            
+            container.innerHTML = templates.map(template => `
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-icon">${template.icon}</div>
+                        <div class="template-info">
+                            <h3>${template.name}</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="template-badges">
+                        <span class="badge badge-category">${template.category}</span>
+                        <span class="badge badge-experience">${template.experience}</span>
+                    </div>
+
+                    ${template.models ? `
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 0.8rem; color: #00ff88; font-weight: 600; margin-bottom: 6px;">Available Models:</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                            ${template.models.map(model => `
+                                <span style="background: rgba(0, 255, 136, 0.1); color: #00ff88; padding: 2px 8px; border-radius: 8px; font-size: 0.7rem; border: 1px solid rgba(0, 255, 136, 0.3);">
+                                    ${model}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="template-description">
+                        ${template.description}
+                    </div>
+                    
+                    <div class="use-cases">
+                        <h4>Key Use Cases:</h4>
+                        <ul>
+                            ${template.useCases.map(useCase => `<li>${useCase}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-details" onclick="toggleDetails(${template.id})">
+                        <span id="btn-text-${template.id}">⚡ Show More Details</span>
+                    </button>
+
+                    <div class="details-section hidden" id="details-${template.id}">
+                        <div class="specs-container">
+                            <div class="specs-header">
+                                <div>Tier</div>
+                                <div>GPU</div>
+                                <div>Memory</div>
+                                <div>vCPUs</div>
+                            </div>
+                            <div class="specs-row">
+                                <div><span class="tier-badge tier-ultra-fast">Ultra Fast</span></div>
+                                <div>${template.tiers['ultra-fast'].gpu}</div>
+                                <div>${template.tiers['ultra-fast'].memory}</div>
+                                <div>${template.tiers['ultra-fast'].vcpu}</div>
+                            </div>
+                            <div class="specs-row">
+                                <div><span class="tier-badge tier-fast">Fast</span></div>
+                                <div>${template.tiers.fast.gpu}</div>
+                                <div>${template.tiers.fast.memory}</div>
+                                <div>${template.tiers.fast.vcpu}</div>
+                            </div>
+                            <div class="specs-row">
+                                <div><span class="tier-badge tier-standard">Standard</span></div>
+                                <div>${template.tiers.standard.gpu}</div>
+                                <div>${template.tiers.standard.memory}</div>
+                                <div>${template.tiers.standard.vcpu}</div>
+                            </div>
+                        </div>
+
+                        <div class="specs-container" style="margin-top: 12px;">
+                            <div class="specs-header">
+                                <div>Tier</div>
+                                <div>Storage</div>
+                                <div>Market</div>
+                                <div>Cost/Hour</div>
+                            </div>
+                            <div class="specs-row">
+                                <div><span class="tier-badge tier-ultra-fast">Ultra Fast</span></div>
+                                <div>${template.tiers['ultra-fast'].storage}</div>
+                                <div>${template.tiers['ultra-fast'].market}</div>
+                                <div>${template.tiers['ultra-fast'].cost} NOS</div>
+                            </div>
+                            <div class="specs-row">
+                                <div><span class="tier-badge tier-fast">Fast</span></div>
+                                <div>${template.tiers.fast.storage}</div>
+                                <div>${template.tiers.fast.market}</div>
+                                <div>${template.tiers.fast.cost} NOS</div>
+                            </div>
+                            <div class="specs-row">
+                                <div><span class="tier-badge tier-standard">Standard</span></div>
+                                <div>${template.tiers.standard.storage}</div>
+                                <div>${template.tiers.standard.market}</div>
+                                <div>${template.tiers.standard.cost} NOS</div>
+                            </div>
+                        </div>
+                        
+                        <div class="docker-info">
+                            <strong>Docker Image:</strong><br>
+                            <code>${template.image}</code>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showDeployment(${template.id})">
+                        Rent This on Nosana
+                    </button>
+
+                    <div class="deployment-section hidden" id="deploy-${template.id}">
+                        <div class="deploy-title">Deploy Command:</div>
+                        <div class="command-box">nosana job post --market ${template.tiers['ultra-fast'].market} \\
+  --image "${template.image}" \\
+  --vcpus ${template.tiers['ultra-fast'].vcpu.split('-')[0]} \\
+  --memory ${template.tiers['ultra-fast'].memory.split('-')[0]} \\
+  --storage ${template.tiers['ultra-fast'].storage}</div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn-copy" onclick="copyCommand(${template.id})">Copy Command</button>
+                            <a href="https://dashboard.nosana.com/markets" target="_blank" class="btn-link">Open Dashboard</a>
+                        </div>
+
+                        <div class="cost-info">
+                            <strong>Estimated Cost:</strong> ${template.tiers['ultra-fast'].cost} NOS/hour<br>
+                            <strong>Performance:</strong> Ultra Fast tier with ${template.tiers['ultra-fast'].gpu}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleDetails(templateId) {
+            const details = document.getElementById(`details-${templateId}`);
+            const btnText = document.getElementById(`btn-text-${templateId}`);
+            
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                btnText.textContent = '⚡ Show Less Details';
+            } else {
+                details.classList.add('hidden');
+                btnText.textContent = '⚡ Show More Details';
+            }
+        }
+
+        function showDeployment(templateId) {
+            const deploySection = document.getElementById(`deploy-${templateId}`);
+            
+            // Close all other deployment sections
+            document.querySelectorAll('.deployment-section').forEach(section => {
+                if (section.id !== `deploy-${templateId}`) {
+                    section.classList.add('hidden');
+                }
+            });
+            
+            // Toggle current deployment section
+            deploySection.classList.toggle('hidden');
+        }
+
+        function copyCommand(templateId) {
+            const template = templates.find(t => t.id === templateId);
+            const ultraFast = template.tiers['ultra-fast'];
+            const command = `nosana job post --market ${ultraFast.market} \\
+  --image "${template.image}" \\
+  --vcpus ${ultraFast.vcpu.split('-')[0]} \\
+  --memory ${ultraFast.memory.split('-')[0]} \\
+  --storage ${ultraFast.storage}`;
+            
+            navigator.clipboard.writeText(command).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }).catch(() => {
+                alert('Command copied to clipboard!');
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', renderTemplates);
+    </script>
+</body>
+</html>
